@@ -1,4 +1,9 @@
 #ifndef TCPLIB_GLOBAL_H
 #define TCPLIB_GLOBAL_H
 
+#if defined(TCPLIB_LIBRARY)
+#  define TCPLIB_EXPORT Q_DECL_EXPORT
+#else
+#  define TCPLIB_EXPORT Q_DECL_IMPORT
+#endif
 #endif // TCPLIB_GLOBAL_H

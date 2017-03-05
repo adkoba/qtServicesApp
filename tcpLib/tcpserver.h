@@ -4,18 +4,21 @@
 class QTcpServer;
 class QNetworkSession;
 
+#include "tcplib_global.h"
+
 #include <QObject>
 #include <QStringList>
 
-class TCPServer : public QObject
+class TCPLIB_EXPORT TCPServer : public QObject
 {
     Q_OBJECT
 
 public:
     explicit TCPServer();
+    void start();
 
 signals:
-    void sMsgLog(const QString&);
+    void sMsgLog(QString);
 
 private slots:
     void sessionOpened();

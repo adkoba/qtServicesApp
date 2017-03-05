@@ -29,3 +29,10 @@ SOURCES += main.cpp\
 HEADERS  += dialog.h
 
 FORMS    += dialog.ui
+
+win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../tcpLib/release/ -ltcpLib
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../tcpLib/debug/ -ltcpLib
+else:unix: LIBS += -L$$OUT_PWD/../tcpLib/ -ltcpLib
+
+INCLUDEPATH += $$PWD/../tcpLib
+DEPENDPATH += $$PWD/../tcpLib

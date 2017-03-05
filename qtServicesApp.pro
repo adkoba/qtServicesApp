@@ -2,4 +2,5 @@ TEMPLATE = subdirs
 
 SUBDIRS += \
     tcpLib \
-    GUIApp
+    GUIApp \
+    CmdApp

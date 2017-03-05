@@ -9,6 +9,17 @@ TCPServer::TCPServer()
     : tcpServer(Q_NULLPTR)
     , networkSession(0)
 {
+    fortunes << tr("You've been leading a dog's life. Stay off the furniture.")
+             << tr("You've got to think about tomorrow.")
+             << tr("You will be surprised by a loud noise.")
+             << tr("You will feel hungry again in another hour.")
+             << tr("You might have mail.")
+             << tr("You cannot kill time without injuring eternity.")
+             << tr("Computers are not intelligent. They only think they are.");
+}
+
+void TCPServer::start()
+{
     QNetworkConfigurationManager manager;
 
     if (manager.capabilities() & QNetworkConfigurationManager::NetworkSessionRequired)
@@ -34,16 +45,6 @@ TCPServer::TCPServer()
     {
         sessionOpened();
     }
-
-    fortunes << tr("You've been leading a dog's life. Stay off the furniture.")
-             << tr("You've got to think about tomorrow.")
-             << tr("You will be surprised by a loud noise.")
-             << tr("You will feel hungry again in another hour.")
-             << tr("You might have mail.")
-             << tr("You cannot kill time without injuring eternity.")
-             << tr("Computers are not intelligent. They only think they are.");
-
-    connect(tcpServer, &QTcpServer::newConnection, this, &TCPServer::sessionOpened);
 }
 
 void TCPServer::sessionOpened()
@@ -64,14 +65,6 @@ void TCPServer::sessionOpened()
         settings.endGroup();
     }
 
-    tcpServer = new QTcpServer(this);
-    if (!tcpServer->listen())
-    {
-        emit sMsgLog(tr("Unable to start the server: %1.")
-                     .arg(tcpServer->errorString()));
-        return;
-    }
-
     QString ipAddress;
     QList<QHostAddress> ipAddressesList = QNetworkInterface::allAddresses();
     // use the first non-localhost IPv4 address
@@ -83,6 +76,16 @@ void TCPServer::sessionOpened()
             break;
         }
     }
+
+    tcpServer = new QTcpServer(this);
+    if (!tcpServer->listen(QHostAddress(ipAddress)))
+    {
+        emit sMsgLog(tr("Unable to start the server: %1.")
+                     .arg(tcpServer->errorString()));
+        return;
+    }
+
+    connect(tcpServer, &QTcpServer::newConnection, this, &TCPServer::sessionOpened);
 
     // if we did not find one, use IPv4 localhost
     if (ipAddress.isEmpty())
