@@ -1,0 +1,4 @@
+#ifndef TCPLIB_GLOBAL_H
+#define TCPLIB_GLOBAL_H
+
+#endif // TCPLIB_GLOBAL_H
